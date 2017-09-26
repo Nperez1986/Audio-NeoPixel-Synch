@@ -16,14 +16,14 @@ The list of items that are being used for this project are (aside from the obvio
   
   The end state: To have the Soundboard in Part A send a signal to the ProTrinket in Portion B to "brighten" the lights from 50/255 to about a 100-150/255 for X amount of time. 
   
-  What I have tred and am looking at for a solution at the moment is for the Soundboard, when pin 2 (let's say) is triggered, not only does the sound play, but a analog signal goes to Pin 3 (the input/interupt pin if I'm not mistaken) on the ProTrinket 5V to brighten the lights for a short amount of time (2-3 seconds tops)
+ The below code allows me to do this
   
   Looking at perhaps placing a switch to set the trigger for this
  ----------------------------------------------------------------------------------------------------------------------------- 
   I've placed the code I've been using on the Pro Trinket with the neopixels below. 
   
-  // NeoPixel Ring simple sketch (c) 2013 Shae Erisson
-// released under the GPLv3 license to match the rest of the AdaFruit NeoPixel library
+ // NeoPixel Ring/Jewel Skecth by Norberto Pérez Urquia
+// Used NeoPixel library than modified
 
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
@@ -31,7 +31,6 @@ The list of items that are being used for this project are (aside from the obvio
 #endif
 
 // Which pin on the Arduino is connected to the NeoPixels?
-// On a Trinket or Gemma we suggest changing this to 1
 #define PIN            4
 
 // How many NeoPixels are attached to the Arduino?
@@ -45,6 +44,11 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(19, 4, NEO_GRB + NEO_KHZ800);
 int delayval = 0; // delay for half a second (500)
 
 void setup() {
+  pinMode(5, INPUT); //define the pin as the INPUT source to read the voltage from your switch
+  pinMode(3, INPUT); 
+  pinMode(6, OUTPUT); //add output if required
+  
+  
   // This is for Trinket 5V 16MHz, you can remove these three lines if you are not using a Trinket
 #if defined (__AVR_ATtiny85__)
   if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
@@ -56,16 +60,85 @@ void setup() {
 
 void loop() {
 
-  // For a set of NeoPixels the first NeoPixel is 0, second is 1, all the way up to the count of pixels minus one.
-
-  for(int i=0;i<NUMPIXELS;i++){
-
-    // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
-    pixels.setPixelColor(i, pixels.Color(50,0,1)); // Zaku Cherry Red color.
-
+  int switchState;
+  int switchState2;
+  
+  switchState=digitalRead(5);
+  switchState2=digitalRead(3);
+  
+  if(switchState == HIGH){
+    digitalWrite(6, LOW);
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(50,0,1)); // Set the Color you want in the Normal state.
     pixels.show(); // This sends the updated pixel color to the hardware.
+    delay(250); // Delay for a period of time (in milliseconds).
+  }
+    if(switchState == LOW){
+      digitalWrite(6, HIGH);    
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(150,0,2)); // Set the color you want when you hit the switch
+    pixels.show(); // This sends the updated pixel color to the hardware.
+    delay(2250); // Delay for a period of time (in milliseconds). Dictate timing based off sound file
 
-    delay(delayval); // Delay for a period of time (in milliseconds).
-
+  }
+  
+  if (switchState2 == LOW){
+      
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(0,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);     
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(18, pixels.Color(10,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);    
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(0,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);     
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(18, pixels.Color(10,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);    
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(0,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);     
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(18, pixels.Color(10,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);    
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(0,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);     
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(18, pixels.Color(10,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);    
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(0,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);     
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(18, pixels.Color(10,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500); 
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(0,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);     
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(18, pixels.Color(10,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(500);  
+    for(int i=0;i<NUMPIXELS;i++)    
+    pixels.setPixelColor(i, pixels.Color(0,0,0)); // Set the color you want when you hit the switch
+    pixels.show(); 
+    delay(3500);
+    for(int i=0;i<NUMPIXELS;i++)
+    pixels.setPixelColor(i, pixels.Color(50,0,1)); // Set the color you want when you hit the switch
+    pixels.show();
+    delay (500); 
   }
 }
